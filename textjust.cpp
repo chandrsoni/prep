@@ -1,0 +1,60 @@
+class Solution {
+public:
+    
+    string addFullJustifiedWord(vector<string>& words, int maxWidth,int currentWidth, int beginIndex, int endIndex) {
+        int wordCount = endIndex - beginIndex;
+        if(wordCount == 1) {
+            return addLeftJustifiedWord(words, maxWidth, currentWidth, beginIndex, endIndex);
+        }
+        int totalSpaces = (maxWidth - currentWidth + wordCount);
+        int numSpaces = totalSpaces / (wordCount - 1);
+        int remSpaces = totalSpaces % (wordCount - 1);
+        
+        string result;
+        
+        for(int i = beginIndex; i < endIndex - 1; i++) {
+            result += words[i];
+            int currentSpaces = numSpaces;
+            if(remSpaces > 0) {
+                currentSpaces++;
+                remSpaces--;
+            }
+            result += string(currentSpaces, ' ');
+        }
+        result += words[endIndex - 1];
+        
+        return result;
+    }
+    
+    string addLeftJustifiedWord(vector<string>& words, int maxWidth,int currentWidth, int beginIndex, int endIndex) {
+        string result;
+        for(int i = beginIndex; i < endIndex - 1; i++) {
+            result += words[i];
+            result += ' ';
+        }
+        result += words[endIndex - 1];
+        result += string(maxWidth - result.size(), ' ');
+        return result;
+    }
+    
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        int currentWordIndex = 0;
+        if(words.size() < 1){
+            return vector<string>();
+        }
+        int currentWidth = 0;
+        vector<string> result;
+        for(int i = 0; i < words.size(); i++) {
+            if(currentWidth + words[i].size() > maxWidth) {
+                // ADD A word here
+                result.push_back(addFullJustifiedWord(words, maxWidth, currentWidth, currentWordIndex, i));
+                currentWordIndex = i;
+                currentWidth = 0;
+            }
+            currentWidth +=(words[i].size() + 1);
+        }
+        result.push_back(addLeftJustifiedWord(words, maxWidth, currentWidth, currentWordIndex, words.size()));
+        
+        return result;
+    }
+};
