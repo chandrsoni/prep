@@ -34,7 +34,7 @@ public:
             }
             keyList[keyIt->second]->erase(key);
             if(keyList[keyIt->second]->empty()) {
-            delete keyList[keyIt->second];
+                delete keyList[keyIt->second];
                 keyList.erase(keyIt->second);
             }
             keyIt->second++;
