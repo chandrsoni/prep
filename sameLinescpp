@@ -1,0 +1,53 @@
+string getFirstWord(string line) {
+    int lineSpaceIndex = line.find(' ');
+    if(lineSpaceIndex <0 || lineSpaceIndex >= line.size()) return line;
+    return line.substr(0, lineSpaceIndex);
+}
+
+bool areSameWords(string word1, string word2, vector<set<string>>& synSets, map<string, int>& synIndex) {
+    if(word1 == word2) return true;
+    return synIndex.find(word1) != synIndex.end()
+        && synIndex.find(word2) != synIndex.end()
+        && synIndex[word1] == synIndex[word2];
+}
+
+bool areSameLines(string line1, string line2, vector<set<string>>& synSets, map<string, int>& synIndex) {
+    cout << line1 << ", " << line2 << endl;
+    if(line1 == line2) return true;
+    if(line1.empty() || line2.empty()) {
+        return false;
+    }
+    
+    string line1word, line2word;
+    line1word = getFirstWord(line1);
+    line2word = getFirstWord(line2);
+    string restLine1 = line1.size() > line1word.size() ? line1.substr(line1word.size() + 1) : "";
+    string restLine2 = line2.size() > line2word.size() ? line2.substr(line2word.size() + 1) : "";
+    return areSameWords(line1word, line2word, synSets, synIndex) 
+        && areSameLines(restLine1, restLine2, synSets, synIndex);
+}
+
+int main () {
+    int synSize;
+    cin >> synSize;
+    vector<set<string>> synSets(synSize);
+    map<string, int> synIndex;
+    int intInput;
+    string strInput;
+    for(int i = 0; i < synSize ; i++) {
+        cin >> intInput;
+        for(int j = 0; j < intInput; j++) {
+            cin >> strInput;
+            synSets[i].insert(strInput);
+            synIndex[strInput] = i;
+        }
+    }
+    
+    string line1, line2;
+    getline(cin, line1);
+    getline(cin, line1);
+    getline(cin, line2);
+    
+    cout << areSameLines(line1, line2, synSets, synIndex) << endl;
+    cout << "Hello world!" << endl;
+}
