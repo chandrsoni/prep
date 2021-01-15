@@ -1,44 +1,30 @@
 #include <iostream>
-#include <stdio.h>
 using namespace std;
 
-void quickSort(vector<int>& numsToSort, int begin, int end) {
-    if(end - begin < 2){ return;}
-    int comparator = numsToSort[begin];
-    int leftIndex = begin;
-    int lastSortedIndex = begin;
-    for(int i = begin+1; i < end; i++) {
-        if(numsToSort[i] < comparator) {
-            int temp = numsToSort[i];
-            numsToSort[i] = numsToSort[leftIndex];
-            numsToSort[leftIndex] = temp;
-            lastSortedIndex = i;
-            leftIndex++;
+void quickSort(vector<int>& numsToSort, int startIndex, int endIndex) {
+    if(startIndex >= endIndex) {
+        return;
+    }
+
+    int smallPointer = startIndex;
+    for (int i = startIndex + 1; i <= endIndex; i++) {
+        if (numsToSort[i] > numsToSort[startIndex]) {
+            continue;
         }
+
+        swap(numsToSort[++smallPointer], numsToSort[i]);
     }
-    int temp = numsToSort[leftIndex];
-    numsToSort[leftIndex] = numsToSort[lastSortedIndex];
-    numsToSort[lastSortedIndex] = temp;
-    for(int i = 0; i < numsToSort.size(); i++) {
-        cout << numsToSort[i] << " ";
-    }
-    cout << endl;
-    quickSort(numsToSort, begin, leftIndex);
-    quickSort(numsToSort, leftIndex+ 1, end);
+    swap(numsToSort[smallPointer], numsToSort[startIndex]);
+
+    quickSort(numsToSort, startIndex, smallPointer - 1);
+    quickSort(numsToSort, smallPointer + 1, endIndex);
 }
 
 int main () {
-    int n;
-    cin >> n;
-    vector<int> numsToSort;
-    int input;
-    for(int i = 0; i < n; i++) {
-        cin >> input;
-        numsToSort.push_back(input);
+    vector<int> numsToSort{3,1,2,5,4};
+    quickSort(numsToSort, 0, numsToSort.size() - 1);
+        for( int i = 0 ; i < numsToSort.size(); i++) {
+        cout << numsToSort[i] << endl;
     }
 
-    quickSort(numsToSort, 0, n);
-    for(int i = 0; i < numsToSort.size(); i++) {
-        cout << numsToSort[i] << endl;
-    }    
 }

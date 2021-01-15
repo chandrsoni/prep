@@ -1,39 +1,28 @@
-#include <stdio.h>
 #include <iostream>
-using namespace std;
 
 void insertionSort(vector<int>& numsToSort) {
+
     for(int i = 0; i < numsToSort.size(); i++) {
-        vector<int>::iterator maxElm = min_element(numsToSort.begin() + i, numsToSort.end());
-        cout << i << "  " << (*maxElm) << endl;
-        int temp = *maxElm;
-        cout << temp << "  " << (*maxElm) << " " << numsToSort[i] << endl;
-        *maxElm = numsToSort[i];
-        numsToSort[i] = temp;
-        cout << temp << "  " << (*maxElm) << " " << numsToSort[i] << endl;
-    }
-    
-    for(int i = 0; i < numsToSort.size(); i++ ) {
-        cout << numsToSort[i] << endl;
+        int minIndex = i;
+        for(int j = i; j < numsToSort.size();j++) {
+            if(numsToSort[j] < numsToSort[minIndex]) {
+                minIndex = j;
+            }
+        }
+
+        // can also use swap as swap(numsToSort[i], numsToSort[minIndex]);
+        int minValue = numsToSort[minIndex];
+        numsToSort[minIndex] = numsToSort[i];
+        numsToSort[i] = minValue;
     }
 }
 
 int main() {
-    int count;
-    cin >> count;
-    vector<int> numsToSort;
-    int input;
-    for(int i = 0; i < count; i++) {
-        cin >> input;
-        numsToSort.push_back(input);
-    }
-    for(int i = 0; i < count; i++ ) {
-        cout << numsToSort[i] << endl;
-    }
+    vector<int> numsToSort{3,1,2,5,4};
     
     insertionSort(numsToSort);
-    for(int i = 0; i < count; i++ ) {
+    
+    for( int i = 0 ; i < numsToSort.size(); i++) {
         cout << numsToSort[i] << endl;
     }
-    cout << "hello" << endl;
 }

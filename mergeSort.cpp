@@ -1,45 +1,33 @@
 #include <iostream>
-#include <stdio.h>
-using namespace std;
 
-void mergeSort(vector<int>& numsToSort, int beginIndex, int endIndex) {
-    
-    cout << beginIndex << ", " << endIndex << endl;
-    if(endIndex - beginIndex <= 1) {
-        return;
+vector<int> mergeSort(vector<int>& numsToSort, int startIndex, int endIndex) {
+    if(startIndex == endIndex) {
+        return vector<int>{numsToSort[startIndex]};
     }
-    cout << "here " << endl;
-    int midIndex = (beginIndex + endIndex) / 2;
-    mergeSort(numsToSort, beginIndex, midIndex);
-    mergeSort(numsToSort, midIndex, endIndex);
-    vector<int> mergeArray;
-    int leftIndex = beginIndex, rightIndex = midIndex;
-    while(leftIndex < midIndex && rightIndex < endIndex) {
-        mergeArray.push_back(numsToSort[leftIndex] < numsToSort[rightIndex]
-        ? numsToSort[leftIndex++]
-        : numsToSort[rightIndex++]);
-    }
-    while(leftIndex < midIndex) {
-        mergeArray.push_back(numsToSort[leftIndex++]);
-    }
+    int midIndex = (startIndex + endIndex)/2;
+    vector<int> lSort = mergeSort(numsToSort, startIndex, midIndex);
+    vector<int> rSort = mergeSort(numsToSort, midIndex+1, endIndex);
+    vector<int> merge;
+    int lPointer = 0, rPointer = 0;
+    for(int i = 0; i <= endIndex - startIndex; i++) {
+        if(rPointer >= rSort.size()) {
+            merge.push_back(lSort[lPointer++]);
+            continue;
+        }
+        if(lPointer >= lSort.size() || lSort[lPointer] > rSort[rPointer] ) {
+            merge.push_back(rSort[rPointer++]);
+            continue;
+        }
 
-    for(int i = 0; i < mergeArray.size(); i++) {
-        numsToSort[i + beginIndex] = mergeArray[i];
+        merge.push_back(lSort[lPointer++]);
     }
+    return merge;
 }
 
 int main() {
-    int count; 
-    cin >> count;
-    int input;
-    vector<int> numsToSort;
-    for(int i = 0; i < count; i++) {
-        cin >> input;
-        numsToSort.push_back(input);
-    }
-
-    mergeSort(numsToSort, 0, count);
-    for(int i = 0; i < count; i++) {
+    vector<int> numsToSort{3,1,2,5,4,7,0};
+    numsToSort = mergeSort(numsToSort, 0, numsToSort.size() - 1);   
+    for( int i = 0 ; i < numsToSort.size(); i++) {
         cout << numsToSort[i] << endl;
     }
 }
